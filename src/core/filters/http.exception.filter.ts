@@ -1,9 +1,4 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-} from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { makeResponse } from '../types/response.types';
 import { isObject } from '@nestjs/common/utils/shared.utils';
@@ -20,9 +15,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     });
 
     const res = exception.getResponse();
-    let msg = '';
+    let msg;
 
     if (isObject(res)) {
+      // todo:: typing
       // @ts-ignore
       msg = Array.isArray(res.message) ? res.message.pop() : res.message;
     } else {
@@ -32,7 +28,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     response.status(exception.getStatus()).json(
       makeResponse({
         message: msg,
-      }),
+      })
     );
   }
 }
