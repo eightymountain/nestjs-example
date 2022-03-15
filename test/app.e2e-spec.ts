@@ -17,7 +17,7 @@ describe('AppController (e2e)', () => {
 
   it('/ (GET)', () => {
     return supertest(app.getHttpServer()).get('/').expect(200).expect({
-      data: `let's ride`,
+      data: 'let`s do that shit!',
       message: '',
     });
   });
