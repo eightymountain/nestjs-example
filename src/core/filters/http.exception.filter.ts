@@ -9,23 +9,25 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
+
     console.error({
       ...exception,
       path: request.url,
     });
 
-    const res = exception.getResponse();
+    const res = exception.getResponse() as
+      | string
+      | { success?: boolean; message: string | string[]; error?: string };
+
     let msg;
 
     if (isObject(res)) {
-      // todo:: typing
-      // @ts-ignore
       msg = Array.isArray(res.message) ? res.message.pop() : res.message;
     } else {
       msg = res;
     }
 
-    response.status(exception.getStatus()).json(
+    response.status(exception.getStatus()).send(
       makeResponse({
         message: msg,
       })
