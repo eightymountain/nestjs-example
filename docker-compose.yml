@@ -2,9 +2,24 @@ version: '3.2'
 
 volumes:
   mariadb_data:
+  redis_data:
   node_modules:
+#  postgres_data:
 
 services:
+#  postgres:
+#    image: bitnami/postgresql:14.2.0
+#    ports:
+#      - '5432:5432'
+#    restart: always
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#      - POSTGRES_DB=postgres
+#    volumes:
+#      - ./postgres.conf:/opt/bitnami/postgresql/conf/postgresql.conf
+#      - postgres_data:/bitnami/postgresql
+#    user: root
   mariadb:
     image: mariadb:focal
     # ports:
@@ -15,13 +30,26 @@ services:
     env_file:
       - .env
 
+  redis:
+    image: bitnami/redis:6.2.7-debian-10-r0
+    ports:
+      - '6379:6379'
+    restart: always
+    volumes:
+      - redis_data:/bitnami/redis/data
+    environment:
+      - REDIS_PASS=redis
+    command: |
+      bash -euxc "redis-server --requirepass $$REDIS_PASS"
+    user: root
+
   web:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 80:80
-      - 9349:9349
+      - "80:80"
+      - "9349:9349"
     env_file:
       - .env
     volumes:
@@ -30,6 +58,7 @@ services:
     restart: always
     depends_on:
       - mariadb
+      - redis
     command: >
       bash -c "if [ $$DEBUGGER == 'true' ]; then
         /wait-for-it.sh mariadb:3306 --strict -- yarn start:debug;
