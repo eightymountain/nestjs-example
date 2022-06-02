@@ -1,4 +1,4 @@
-import { ValidationException } from '@core/exception/validation.exception';
+import { ValidationException } from '@core/exceptions/validation.exception';
 import { Injectable, ValidationPipe as ValidationPipeBuiltin } from '@nestjs/common';
 
 @Injectable()
