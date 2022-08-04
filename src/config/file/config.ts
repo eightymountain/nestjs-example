@@ -1,0 +1,32 @@
+import { registerAs } from '@nestjs/config';
+
+export default registerAs('file', () => ({
+  MAX_UPLOAD_COUNT: 1,
+  MAX_FILE_SIZE: '2000mb',
+  MIME_WHITELIST: [
+    'image/png',
+    'image/jpeg',
+    'image/jpg',
+    'audio/mpeg',
+    'audio/ogg',
+    'audio/aac',
+    'audio/webm',
+    'audio/m4a',
+    'audio/mp4',
+    'audio/ac3',
+    'audio/opus',
+    'audio/mpeg',
+    'audio/ogg',
+    'video/mpeg',
+    'video/mp4',
+    'video/ogg',
+    'video/webm',
+    'video/x-msvideo',
+    'video/AV1',
+    'video/H265',
+    'video/H264',
+    'video/VP8',
+    'video/VP9',
+  ],
+  TASK_EXPIRY_MINUTES: 24 * 60 * 0 + 60 * 8,
+}));
